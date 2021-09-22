@@ -2,6 +2,7 @@ node_modules/
 .expo/
 npm-debug.*
 *.jks
+yarn-error.log
 *.p8
 *.p12
 *.key
