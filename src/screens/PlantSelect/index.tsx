@@ -10,29 +10,18 @@ import { Load } from "../../components/Load";
 import api from "../../services/api";
 import { styles } from "./styles";
 import colors from "../../styles/colors";
+import { PlantProps } from "../../libs/storage";
 
 type EnvironmentProps = {
   key: string;
   title: string;
 };
 
-type PlantsProps = {
-  id: string;
-  name: string;
-  about: string;
-  water_tips: string;
-  photo: string;
-  environments: [string];
-  frequency: {
-    times: number;
-    repeat_every: string;
-  };
-};
 
 export function PlantSelect() {
   const [environment, setEnvironment] = useState<EnvironmentProps[]>([]);
-  const [plants, setPlants] = useState<PlantsProps[]>([]);
-  const [filteredPlants, setFilteredPlants] = useState<PlantsProps[]>([]);
+  const [plants, setPlants] = useState<PlantProps[]>([]);
+  const [filteredPlants, setFilteredPlants] = useState<PlantProps[]>([]);
   const [environmentSelected, setEnvironmentSelected] = useState("all");
   const [loading, setLoading] = useState(true);
 
@@ -79,7 +68,7 @@ export function PlantSelect() {
   };
 
   const handlePlantSelect = (plant: PlantsProps) =>{
-      navigation.navigate('PlantSave')
+      navigation.navigate('PlantSave', {plant})
   }
 
   useEffect(() => {
