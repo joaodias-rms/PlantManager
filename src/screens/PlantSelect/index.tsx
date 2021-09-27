@@ -67,7 +67,7 @@ export function PlantSelect() {
     fetchPlants();
   };
 
-  const handlePlantSelect = (plant: PlantsProps) =>{
+  const handlePlantSelect = (plant: PlantProps) =>{
       navigation.navigate('PlantSave', {plant})
   }
 
