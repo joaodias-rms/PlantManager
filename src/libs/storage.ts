@@ -13,7 +13,7 @@ export type PlantProps = {
       times: number;
       repeat_every: string;
     };
-    DateTimeNotification: Date;
+    dateTimeNotification: Date;
   };
 };
 
@@ -40,6 +40,34 @@ export async function plantSave(plant: PlantProps): Promise<void> {
         ...oldPlants,
       })
     );
+  } catch (erro) {
+    throw new Error(erro);
+  }
+}
+
+export async function plantLoad(): Promise<PlantProps[]> {
+  try {
+    const data = await AsyncStorage.getItem("@plantmanager:plants");
+    const plants = data ? (JSON.parse(data) as StoragePlantProps) : {};
+
+    const plantsSorted = Object.keys(plants)
+      .map((plant) => {
+        return {
+          ...plants[plant].data,
+          hour: format(
+            new Date(plants[plant].data.dateTimeNotification),
+            "HH:mm"
+          ),
+        };
+      })
+      .sort((a, b) =>
+        Math.floor(
+          new Date(a.dateTimeNotification).getTime() / 1000 -
+            Math.floor(new Date(b.dateTimeNotification).getTime() / 1000)
+        )
+      );
+
+    return plantsSorted;
   } catch (erro) {
     throw new Error(erro);
   }
