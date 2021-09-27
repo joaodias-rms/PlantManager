@@ -28,7 +28,6 @@ export const styles = StyleSheet.create({
        flex: 1,
        color: colors.blue,
        paddingHorizontal: 20,   
-       textAlign: 'justify'
    },
    plants:{
        flex: 1,
