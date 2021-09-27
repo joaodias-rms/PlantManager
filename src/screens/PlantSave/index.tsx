@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useRoute } from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/native";
+import { plantLoad, PlantProps, plantSave } from "../../libs/storage";
 
 import DateTimePicker, { Event } from "@react-native-community/datetimepicker";
 import { format, isBefore } from "date-fns";
@@ -15,8 +17,7 @@ import { format, isBefore } from "date-fns";
 import waterImg from "../../assets/waterdrop.png";
 import { SvgFromUri } from "react-native-svg";
 
-import { PlantProps } from "../../libs/storage";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/Button"; 
 
 import { styles } from "./styles";
 
@@ -29,6 +30,7 @@ export function PlantSave() {
   const [showDatePicker, setShowDatePicker] = useState(Platform.OS === "ios");
 
   const route = useRoute();
+  const navigation = useNavigation()
   const { plant } = route.params as Params;
 
   const handleChangeTime = (event: Event, dateTime: Date | undefined) => {
@@ -45,6 +47,28 @@ export function PlantSave() {
   const handleOpenDateTimePickerAndroid = () => {
     setShowDatePicker((oldState) => !oldState);
   };
+
+  const handleSave = async () =>{
+    // const data =  await plantLoad()
+    //  return console.log(data);
+    
+    try {
+      await plantSave({
+        ...plant,
+        dateTimeNotification: selectedTime
+      });
+
+      navigation.navigate("Confirmation", {
+        title: 'Tudo certo',
+        subTitle: 'Fique tranquilo que sempre vamos lembar você de cuidar da sua plantinha com muito cuidado',
+        buttonTitle: 'Muito obrigado',
+        icon: 'hug',
+        nextScreen: 'MyPlants'
+      })
+    }catch{
+      Alert.alert("Não foi possível salvar");
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -83,7 +107,7 @@ export function PlantSave() {
           </TouchableOpacity>
         )}
 
-        <Button title="Cadastrar planta" onPress={() => {}} />
+        <Button title="Cadastrar planta" onPress={handleSave} />
       </View>
     </View>
   );
